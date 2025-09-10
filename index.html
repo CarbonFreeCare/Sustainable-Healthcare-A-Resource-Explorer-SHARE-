@@ -3,60 +3,109 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NHS Kent & Medway — Sustainability Resources</title>
+  <title>SHARE — Sustainable Healthcare: A Resource Explorer</title>
+  <meta name="description" content="A curated open‑access library for environmentally sustainable healthcare. Browse by category, filter tables, and contribute.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
   <style>
-    :root { --bg:#f7fafc; --card:#ffffff; --text:#1a202c; --muted:#4a5568; --brand:#2b6cb0; --brand-soft:#ebf8ff; --radius:16px; }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--text);background:var(--bg);line-height:1.5}
-    header{position:sticky;top:0;z-index:20;backdrop-filter:blur(8px);background:rgba(247,250,252,.85);border-bottom:1px solid #e2e8f0}
-    .container{max-width:1200px;margin:0 auto;padding:20px}
-    .hero{display:grid;grid-template-columns:1fr;gap:12px;padding:16px 0 8px}
-    .hero h1{margin:0;font-size:28px;font-weight:700}
-    .hero p{margin:0;color:var(--muted)}
-    .searchbar{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:10px}
-    input[type="search"]{padding:12px 14px;border-radius:12px;border:1px solid #e2e8f0;background:#fff;font-size:16px;outline:none}
-    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand);font-weight:600;font-size:12px;margin-left:8px}
-    nav.categories{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 8px}
-    nav.categories a{text-decoration:none;color:var(--brand);background:var(--brand-soft);padding:8px 12px;border-radius:999px;font-weight:600;font-size:13px}
-    section.card{background:var(--card);border:1px solid #e2e8f0;border-radius:var(--radius);padding:16px;margin:18px 0;box-shadow:0 1px 2px rgba(0,0,0,.04)}
-    section.card h2{margin:0 0 8px;font-size:20px}
-    .meta{color:var(--muted);font-size:13px;margin-bottom:10px}
-    footer{text-align:center;color:var(--muted);padding:32px 0 48px}
-    table.dataTable thead th{position:sticky;top:0;background:#fff}
-    .contrib{background:#edf2f7;border:1px dashed #cbd5e0;padding:12px;border-radius:12px;font-size:14px}
-    .toplink{position:fixed;bottom:16px;right:16px;background:var(--brand);color:#fff;padding:10px 12px;border-radius:10px;text-decoration:none}
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --brand: #6b5cff;
+      --brand-soft: #eef2ff;
+      --accent: #14b8a6;
+      --radius: 16px;
+      --shadow: 0 8px 24px rgba(2,6,23,.06);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg:#0b1020; --surface:#0f152a; --text:#e5e7eb; --muted:#9aa3b2; --brand:#8b83ff; --brand-soft:#1b1f3a; --accent:#2dd4bf; --shadow: 0 8px 24px rgba(0,0,0,.35); }
+      table.dataTable thead th { background: var(--surface) !important; }
+      .contrib { background: #101935; border-color: #253055; }
+      .pill { background: #101935; }
+      input[type="search"] { background: #0b1120; color: var(--text); border-color:#1f2a44;}
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; color: var(--text); background: radial-gradient(1200px 600px at 20% -10%, var(--brand-soft), transparent 40%), var(--bg); line-height: 1.55; }
+    header { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(10px); background: rgba(248,250,252,.85); border-bottom: 1px solid #e2e8f0; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .hero { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; padding: 10px 0; }
+    .title { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.01em; }
+    .subtitle { margin: 4px 0 0; color: var(--muted); font-weight: 500; }
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 999px; background: var(--brand-soft); color: var(--brand); font-weight: 700; font-size: 12px; margin-left: 8px; }
+    .btn { text-decoration: none; color: white; background: var(--brand); padding: 10px 14px; border-radius: 12px; font-weight: 700; box-shadow: var(--shadow); }
+    .row { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-top: 10px; }
+    input[type="search"] { padding: 12px 14px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 16px; outline: none; box-shadow: inset 0 1px 0 rgba(2,6,23,.04); }
+    nav.categories { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 8px; }
+    nav.categories a { text-decoration: none; color: var(--brand); background: var(--brand-soft); padding: 8px 12px; border-radius: 999px; font-weight: 700; font-size: 13px; border: 1px solid rgba(107,92,255,.25); }
+    main { padding-bottom: 56px; }
+    section.card { background: var(--surface); border: 1px solid rgba(71,85,105,.12); border-radius: var(--radius); padding: 16px; margin: 18px 0; box-shadow: var(--shadow); }
+    section.card h2 { margin: 0 0 6px; font-size: 20px; letter-spacing: -0.01em; }
+    .meta { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+    .banner { margin: 10px 0 0; padding: 10px 12px; border-radius: 12px; background: #fff7ed; color: #7c2d12; border: 1px solid #fed7aa; font-size: 14px; }
+    .about { display: grid; grid-template-columns: 1fr; gap: 12px; background: var(--surface); border: 1px solid rgba(71,85,105,.12); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); margin: 14px 0; }
+    .about h3 { margin: 0; font-size: 16px; }
+    footer { text-align: center; color: var(--muted); padding: 28px 0 48px; font-size: 14px; }
+    table.dataTable thead th { position: sticky; top: 0; background: var(--surface); }
+    .toplink { position: fixed; bottom: 16px; right: 16px; background: var(--accent); color: white; padding: 10px 12px; border-radius: 10px; text-decoration: none; font-weight: 700; }
   </style>
 </head>
 <body>
   <header>
     <div class="container hero">
-      <h1>NHS Kent & Medway — Sustainability Resources <span class="pill">Open Collection</span></h1>
-      <p>Curated over three years by the Sustainability Lead. Browse by category, filter tables, and contribute updates.</p>
-      <div class="searchbar">
-        <input id="globalSearch" type="search" placeholder="Global search across categories (title, description, link, tags, etc.)…" />
-        <a href="#contribute" style="align-self:center;text-decoration:none;color:#fff;background:var(--brand);padding:10px 14px;border-radius:10px;font-weight:600;">How to contribute</a>
+      <div>
+        <h1 class="title">SHARE — Sustainable Healthcare: A Resource Explorer <span class="pill">Open Collection</span></h1>
+        <p class="subtitle">A curated open‑access library for environmentally sustainable healthcare. Explore by category, filter tables, and contribute.</p>
+        <div class="banner">🚧 Early public preview. Content is being tidied and expanded — feedback is welcome.</div>
+        <div class="row">
+          <input id="globalSearch" type="search" placeholder="Global search across categories (title, summary, link, tags)…" aria-label="Global search">
+          <a class="btn" href="#contribute">Contribute</a>
+        </div>
+        <nav class="categories" id="categoryNav" aria-label="Categories"></nav>
       </div>
-      <nav class="categories" id="categoryNav"></nav>
+      <div>
+        <a class="btn" href="#" id="toggleTheme" style="background:#14b8a6;">Toggle theme</a>
+      </div>
     </div>
   </header>
 
   <main class="container" id="content"></main>
 
+  <section class="container about">
+    <div>
+      <h3>About this project</h3>
+      <p>SHARE is a personal, non‑affiliated initiative to organise and accelerate access to practical knowledge for sustainable healthcare — spanning clinical practice, estates, digital, prescribing, education, and more. The collection is international in scope and welcomes contributions from everyone.</p>
+      <p class="meta">Maintainer: <strong>EcoAli</strong> • License: CC BY 4.0</p>
+    </div>
+  </section>
+
+  <section class="container card" id="contribute">
+    <h2>Contribute</h2>
+    <div class="meta">Help improve SHARE by adding resources, reporting broken links, or suggesting new categories.</div>
+    <div class="contrib" style="background:var(--brand-soft); border:1px dashed rgba(107,92,255,.4); padding:12px; border-radius:12px;">
+      <ol>
+        <li><strong>Open an issue or pull request</strong> on the GitHub repository.</li>
+        <li>When adding entries, please include: Title, Link/DOI, Source/Author, Year, Summary, Tags, and Notes.</li>
+        <li>Prefer authoritative sources and note UK/NHS relevance where applicable.</li>
+      </ol>
+      <p><a class="btn" href="https://github.com/EcoAli/Sustainable-Healthcare-A-Resource-Explorer-SHARE-" target="_blank" rel="noopener">Open the repository</a></p>
+    </div>
+  </section>
+
   <a class="toplink" href="#">↑ Top</a>
 
   <footer>
-    Built with ❤️ as a static site. Host on GitHub Pages or Netlify. Licensed CC BY 4.0.
+    Built with a simple static front‑end. Host on GitHub Pages or Netlify. No affiliation with any organisation.
   </footer>
 
   <template id="sectionTemplate">
-    <section class="card" id="SECTION_ID">
-      <h2>TITLE</h2>
-      <div class="meta">COLUMNS_COUNT columns • <span class="rows-count">ROWS_COUNT</span> rows</div>
-      <div class="table-wrap">
+    <section class="card" id="SECTION_ID" aria-label="SECTION_TITLE">
+      <h2>SECTION_TITLE</h2>
+      <div class="meta"><span class="cols">COLUMNS_COUNT</span> columns • <span class="rows-count">ROWS_COUNT</span> rows</div>
+      <div class="table-wrap" role="region" aria-label="Data table">
         <table class="display compact" style="width:100%">
           <thead><tr>THEAD</tr></thead>
           <tbody>TBODY</tbody>
@@ -65,21 +114,21 @@
     </section>
   </template>
 
-  <section class="container card" id="contribute">
-    <h2>How to contribute</h2>
-    <div class="contrib">
-      <p>Use the “Edit on GitHub” button (once hosted) or open an issue/PR to add, fix, or remove entries. You can also email suggested links. Each category maps to a spreadsheet tab; add rows with as many fields as possible.</p>
-      <ul>
-        <li><strong>Preferred format:</strong> Title, Link/DOI, Source/Author, Year, Summary, Tags, Notes.</li>
-        <li><strong>Quality tips:</strong> Include NHS relevance, UK guidance where possible, and date-checked.</li>
-      </ul>
-    </div>
-  </section>
-
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
   <script>
+    // Theme toggle (light/dark using dataset flag)
+    const toggle = document.getElementById('toggleTheme');
+    toggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      const root = document.documentElement;
+      const current = root.getAttribute('data-theme') || 'light';
+      root.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+      // letting prefers-color-scheme handle most colors; this provides a manual override
+      if (root.style.colorScheme === 'dark') { root.style.colorScheme = 'light'; }
+      else { root.style.colorScheme = 'dark'; }
+    });
+
     const nav = document.getElementById('categoryNav');
     const content = document.getElementById('content');
     const tmpl = document.getElementById('sectionTemplate').innerHTML;
@@ -100,7 +149,7 @@
       for (const cat of categories) {
         const {columns, rows} = data[cat];
         const id = cat.toLowerCase().replace(/[^a-z0-9]+/g,'-');
-        let thead = columns.map(c => `<th>${c}</th>`).join('');
+        let thead = columns.map(c => `<th scope="col">${c}</th>`).join('');
         let tbody = rows.map(r => {
           return '<tr>' + columns.map(c => {
             let v = r[c] ?? '';
@@ -112,8 +161,8 @@
         }).join('');
 
         let html = tmpl
-          .replace('SECTION_ID', id)
-          .replace('TITLE', cat)
+          .replaceAll('SECTION_ID', id)
+          .replaceAll('SECTION_TITLE', cat)
           .replace('COLUMNS_COUNT', columns.length)
           .replace('ROWS_COUNT', rows.length)
           .replace('THEAD', thead)
@@ -128,7 +177,9 @@
         paging: true,
         searching: true,
         info: true,
-        scrollX: true
+        scrollX: true,
+        order: [],
+        language: { search: "Filter table:" }
       });
 
       const global = document.getElementById('globalSearch');
