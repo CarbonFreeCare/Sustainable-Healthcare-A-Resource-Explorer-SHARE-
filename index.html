@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NHS Kent & Medway — Sustainability Resources</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+  <style>
+    :root { --bg:#f7fafc; --card:#ffffff; --text:#1a202c; --muted:#4a5568; --brand:#2b6cb0; --brand-soft:#ebf8ff; --radius:16px; }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--text);background:var(--bg);line-height:1.5}
+    header{position:sticky;top:0;z-index:20;backdrop-filter:blur(8px);background:rgba(247,250,252,.85);border-bottom:1px solid #e2e8f0}
+    .container{max-width:1200px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1fr;gap:12px;padding:16px 0 8px}
+    .hero h1{margin:0;font-size:28px;font-weight:700}
+    .hero p{margin:0;color:var(--muted)}
+    .searchbar{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:10px}
+    input[type="search"]{padding:12px 14px;border-radius:12px;border:1px solid #e2e8f0;background:#fff;font-size:16px;outline:none}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand);font-weight:600;font-size:12px;margin-left:8px}
+    nav.categories{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 8px}
+    nav.categories a{text-decoration:none;color:var(--brand);background:var(--brand-soft);padding:8px 12px;border-radius:999px;font-weight:600;font-size:13px}
+    section.card{background:var(--card);border:1px solid #e2e8f0;border-radius:var(--radius);padding:16px;margin:18px 0;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+    section.card h2{margin:0 0 8px;font-size:20px}
+    .meta{color:var(--muted);font-size:13px;margin-bottom:10px}
+    footer{text-align:center;color:var(--muted);padding:32px 0 48px}
+    table.dataTable thead th{position:sticky;top:0;background:#fff}
+    .contrib{background:#edf2f7;border:1px dashed #cbd5e0;padding:12px;border-radius:12px;font-size:14px}
+    .toplink{position:fixed;bottom:16px;right:16px;background:var(--brand);color:#fff;padding:10px 12px;border-radius:10px;text-decoration:none}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container hero">
+      <h1>NHS Kent & Medway — Sustainability Resources <span class="pill">Open Collection</span></h1>
+      <p>Curated over three years by the Sustainability Lead. Browse by category, filter tables, and contribute updates.</p>
+      <div class="searchbar">
+        <input id="globalSearch" type="search" placeholder="Global search across categories (title, description, link, tags, etc.)…" />
+        <a href="#contribute" style="align-self:center;text-decoration:none;color:#fff;background:var(--brand);padding:10px 14px;border-radius:10px;font-weight:600;">How to contribute</a>
+      </div>
+      <nav class="categories" id="categoryNav"></nav>
+    </div>
+  </header>
+
+  <main class="container" id="content"></main>
+
+  <a class="toplink" href="#">↑ Top</a>
+
+  <footer>
+    Built with ❤️ as a static site. Host on GitHub Pages or Netlify. Licensed CC BY 4.0.
+  </footer>
+
+  <template id="sectionTemplate">
+    <section class="card" id="SECTION_ID">
+      <h2>TITLE</h2>
+      <div class="meta">COLUMNS_COUNT columns • <span class="rows-count">ROWS_COUNT</span> rows</div>
+      <div class="table-wrap">
+        <table class="display compact" style="width:100%">
+          <thead><tr>THEAD</tr></thead>
+          <tbody>TBODY</tbody>
+        </table>
+      </div>
+    </section>
+  </template>
+
+  <section class="container card" id="contribute">
+    <h2>How to contribute</h2>
+    <div class="contrib">
+      <p>Use the “Edit on GitHub” button (once hosted) or open an issue/PR to add, fix, or remove entries. You can also email suggested links. Each category maps to a spreadsheet tab; add rows with as many fields as possible.</p>
+      <ul>
+        <li><strong>Preferred format:</strong> Title, Link/DOI, Source/Author, Year, Summary, Tags, Notes.</li>
+        <li><strong>Quality tips:</strong> Include NHS relevance, UK guidance where possible, and date-checked.</li>
+      </ul>
+    </div>
+  </section>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+  <script>
+    const nav = document.getElementById('categoryNav');
+    const content = document.getElementById('content');
+    const tmpl = document.getElementById('sectionTemplate').innerHTML;
+
+    async function load() {
+      const res = await fetch('assets/resources.json');
+      const data = await res.json();
+      const categories = Object.keys(data);
+
+      categories.forEach(cat => {
+        const a = document.createElement('a');
+        const id = cat.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+        a.href = '#' + id;
+        a.textContent = cat;
+        nav.appendChild(a);
+      });
+
+      for (const cat of categories) {
+        const {columns, rows} = data[cat];
+        const id = cat.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+        let thead = columns.map(c => `<th>${c}</th>`).join('');
+        let tbody = rows.map(r => {
+          return '<tr>' + columns.map(c => {
+            let v = r[c] ?? '';
+            if (typeof v === 'string' && /https?:\/\//.test(v)) {
+              v = v.replace(/(https?:\/\/[\S]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+            }
+            return `<td>${v}</td>`;
+          }).join('') + '</tr>';
+        }).join('');
+
+        let html = tmpl
+          .replace('SECTION_ID', id)
+          .replace('TITLE', cat)
+          .replace('COLUMNS_COUNT', columns.length)
+          .replace('ROWS_COUNT', rows.length)
+          .replace('THEAD', thead)
+          .replace('TBODY', tbody);
+
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = html;
+        content.appendChild(wrapper.firstElementChild);
+      }
+
+      $('table.display').DataTable({
+        paging: true,
+        searching: true,
+        info: true,
+        scrollX: true
+      });
+
+      const global = document.getElementById('globalSearch');
+      global.addEventListener('input', (e) => {
+        const q = e.target.value;
+        $('table.display').each(function(){
+          $(this).DataTable().search(q).draw();
+        });
+        document.querySelectorAll('section.card').forEach(sec => {
+          const table = sec.querySelector('table');
+          if (!table) return;
+          const api = $(table).DataTable();
+          const info = api.page.info();
+          sec.querySelector('.rows-count').textContent = info.recordsDisplay;
+        });
+      });
+    }
+    load();
+  </script>
+</body>
+</html>
