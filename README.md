@@ -39,7 +39,7 @@ You can help by:
 ### 📬 Ways to contribute:
 
 1. **GitHub**: Open an [Issue](https://github.com/EcoAli/Sustainable-Healthcare-A-Resource-Explorer-SHARE-/issues) or submit a [Pull Request](https://github.com/EcoAli/Sustainable-Healthcare-A-Resource-Explorer-SHARE-/pulls)
-2. **Google Form** (coming soon)
+2. 2. **Google Form:** **[Submit via this form](https://forms.gle/ywM63u5vodotiLgD8)**
 3. Contact the maintainer via the site
 
 When adding new entries, please include:
@@ -62,7 +62,7 @@ This project is published under the [Creative Commons Attribution 4.0 Internatio
 
 ## 👤 Maintainer
 
-**EcoAli** – Sustainability Lead (NHS), independent curator of this repository.
+**EcoAli** – independent curator of this repository.
 
 ---
 
