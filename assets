@@ -1,0 +1,33 @@
+{
+  "Getting started": {
+    "columns": [
+      "Title",
+      "Summary",
+      "Link",
+      "Tags",
+      "Source/Author",
+      "Year",
+      "Notes"
+    ],
+    "rows": [
+      {
+        "Title": "About SHARE",
+        "Summary": "Overview of the project and how to contribute.",
+        "Link": "https://carbonfreecare.github.io/Sustainable-Healthcare-A-Resource-Explorer-SHARE-/#contribute",
+        "Tags": "Workforce and System Leadership; Education and Behaviour Change",
+        "Source/Author": "CarbonFreeCare",
+        "Year": "2025",
+        "Notes": "Start here."
+      },
+      {
+        "Title": "Submit a resource",
+        "Summary": "Quick Google Form to add tools, guidance or case studies aligned to NHS Green Plan categories.",
+        "Link": "https://forms.gle/ywM63u5vodotiLgD8",
+        "Tags": "All categories",
+        "Source/Author": "Community",
+        "Year": "",
+        "Notes": ""
+      }
+    ]
+  }
+}
